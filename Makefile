@@ -42,14 +42,14 @@ train:
 
 # checking and installing bash dependencies if absent
 bash_dependencies:
-	./scripts/dependencies.sh assert docker
+	./scripts/dependencies.sh assert docker curl
 
 docker_build:
 	docker build -t $(IMAGE) .
 
 # downloading data if absent
 data/gztan.tar.gz:
-	$(DOCKER_RUN) curl http://opihi.cs.uvic.ca/sound/genres.tar.gz --output data/gztan.tar.gz
+	curl http://opihi.cs.uvic.ca/sound/genres.tar.gz --output data/gztan.tar.gz
 
 # unpack
 data/genres: data/gztan.tar.gz
@@ -83,8 +83,6 @@ data/encoding.pkl:
 # computing melgrams if absent
 data/melgrams.pkl:
 	$(DOCKER_RUN) pipenv run python classifier/preprocess/create_melgrams.py
-
-
 
 
 

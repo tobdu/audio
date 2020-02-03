@@ -1,14 +1,19 @@
 # Music Genre Classifier
 ## Run
-```make all``` 
+```make all```
 
-Will download the data, use a dockerized setup to compile a python virtual env containg all the necessary dependencies, run the pre-processing steps and run the training.
-The output can be found in the `target/` folder.
+Will execute the following:
+* Download the data.
+* Use a dockerized setup to compile a python virtual env containg all the necessary dependencies.
+* Run the pre-processing steps.
+* Run the training.
+* All code will be executed in a docker container, but it will work on the local directory
+* The output can be found in the `target/` folder.
 
-Look in the [Makefile](Makefile) for other commands.
+Look in the [Makefile](Makefile) to execute individual steps.
 
-Any data-creating step that has already been executed will not be repeated, as long as the data is still there. So executing `make all` a second time will skip the setup and the pre-processing and go straight to the training.
-
+For all steps that create data: If the data is already there the step will be skipped.
+So running `make all` a second time will jump directly to the training.
 
 ## Model Architecture
 #### Blocks
@@ -19,7 +24,7 @@ Another, maybe even more fair option would be to calculate the `area under the R
 #### Dropout
 Dropout is always a safe way to add randomness, making the model more robust and less flexible. 
 The good thing about it is that it doesn't fake any input data and can therefor not make any wrong assumption about it.
-The downside is that dropout cannot really help you with small data.
+Dropout cannot really help you with small data.
 
 
 #### Tuning
@@ -85,3 +90,11 @@ The multi class results are terrible. But on the bright side, the low training e
 ![](target/1580741487/loss_history.png)
 ![](target/1580741487/matrix.png)
 b-e-a-utiful :)
+
+## Deployment
+Since the project is dockerized, deploying it to GCP AI Platform for hyper-paramater search and model deployment is fairly easy.
+### Steps:
+* Add a task.py file that accepts the correct input parameters.
+* Change the docker setup slightly so that it runs on the filesystem inside the container, rather than outside.
+* Upload the image to GCR.
+* run `gcloud ai-platform jobs submit training .... --master-image-uri $IMAGE_URI ....`

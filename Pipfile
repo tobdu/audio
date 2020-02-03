@@ -23,6 +23,7 @@ future = "*"
 kapre = "*"
 matplotlib = "*"
 seaborn = "*"
+pylint = "*"
 
 [dev-packages]
 
