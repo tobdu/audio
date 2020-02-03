@@ -14,6 +14,8 @@ Look in the [Makefile](Makefile) to execute individual steps.
 
 For all steps that create data: If the data is already there the step will be skipped.
 So running `make all` a second time will jump directly to the training.
+#### Skip Downloading
+If you have the dataset already on your computer you can skip the 30min download by copying the dataset (packed or unpacked) into the data folder and name it as its accompanying make target.
 
 ## Model Architecture
 #### Blocks
@@ -82,7 +84,7 @@ Segmenting has several benefits:
 
 ## Results
 #### Two classes
-On just two classes the results are actually quite good. 
+On just two classes the results are actually quite good.
 ![](target/1580740712/loss_history.png)
 ![](target/1580740712/matrix.png)
 #### Multi class

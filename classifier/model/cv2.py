@@ -32,7 +32,7 @@ def build(input_shape, output_shape):
     model.add(BatchNormalization(axis=channel_axis, mode=0, name='bn2'))
     model.add(ELU())
     model.add(MaxPooling2D(pool_size=(2, 4), name='pool2', dim_ordering="th"))
-    model.add(Dropout(0.15, name='dropout2'))
+    model.add(Dropout(0.2, name='dropout2'))
 
     # Conv block 3
     model.add(Convolution2D(64, 3, 3, border_mode='same', name='conv3'))

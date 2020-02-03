@@ -21,8 +21,8 @@ def load_data(path, encoder):
     print("loading data")
     df = pd.read_pickle(path)
 
-    # genres = {"blues", "classical"}
-    # df = df[df['id'].apply(lambda x: x in genres)]
+    genres = {"blues", "classical"}
+    df = df[df['id'].apply(lambda x: x in genres)]
 
     print("formatting X")
     X = [i[0] for i in df["melgram"]]
@@ -76,7 +76,7 @@ if __name__ == "__main__":
     history = model.fit(
         X_train,
         y_train,
-        epochs=15,
+        epochs=80,
         validation_data=(X_test, y_test),
         batch_size=64
     )
