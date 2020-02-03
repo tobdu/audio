@@ -48,15 +48,20 @@ docker_build:
 	docker build -t $(IMAGE) .
 
 # downloading data if absent
-data/genres:
+data/gztan.tar.gz:
 	$(DOCKER_RUN) curl http://opihi.cs.uvic.ca/sound/genres.tar.gz --output data/gztan.tar.gz
+
+# unpack
+data/genres: data/gztan.tar.gz
 	$(DOCKER_RUN) tar zxvf data/gztan.tar.gz -C data
 
+# create the .venv folder on your local machine
+compile:
+	pipenv --three install
 
 # run the compilation process in a docker container
-# but create the .venv folder on your local machine
 .venv:
-	$(DOCKER_RUN) pipenv --three install
+	$(DOCKER_RUN) make compile
 
 
 
@@ -87,4 +92,4 @@ data/melgrams.pkl:
 
 
 
-.PHONY: setup train bash_dependencies docker_build preprocess all
+.PHONY: setup train bash_dependencies docker_build preprocess all compile
