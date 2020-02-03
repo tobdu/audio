@@ -72,13 +72,13 @@ if __name__ == "__main__":
 
     print("de-encoding labels")
     y_predict = encoder.inverse_transform(y_predict)
-
     y_test = encoder.inverse_transform(y_test)
 
     print("printing results")
+    histories.plot(history, 'data')
     confusion_matrix.plot(y_test, y_predict, 'data/matrix.png')
 
-    # histories.plot(history, 'data/history.png')
+
 
     print("saving model")
     model.save('data/model.h5')
