@@ -2,10 +2,12 @@
 ## Run
 ```make all``` 
 
-Will download the data, use a dockerized setup to compile a python virtual env containg all the necessary dependencies, run the preprocessing steps and run the training.
+Will download the data, use a dockerized setup to compile a python virtual env containg all the necessary dependencies, run the pre-processing steps and run the training.
 The output can be found in the `target/` folder.
 
 Look in the [Makefile](Makefile) for other commands.
+
+Any data-creating step that has already been executed will not be repeated, as long as the data is still there. So executing `make all` a second time will skip the setup and the pre-processing and go straight to the training.
 
 
 ## Model Architecture
