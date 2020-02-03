@@ -1,3 +1,4 @@
+from kapre.filterbank import Filterbank
 from keras.layers import Conv2D, BatchNormalization, Convolution2D, ELU, MaxPooling2D, GaussianDropout, GaussianNoise, \
     Dropout
 from keras.layers import Dense, Flatten
@@ -10,6 +11,9 @@ def build(input_shape, output_shape):
 
     # create model
     model = Sequential()
+
+    # model.add(Filterbank(n_fbs=1, trainable_fb=True, sr=12000, init='mel', fmin=0., fmax=None,
+    #                      bins_per_octave=12, image_data_format='default', input_shape=input_shape))
 
     # Input block
     model.add(BatchNormalization(axis=freq_axis, name='bn_0_freq', input_shape=input_shape))

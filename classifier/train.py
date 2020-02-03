@@ -65,7 +65,14 @@ if __name__ == "__main__":
     model.summary()
 
     print("training model")
-    history = model.fit(X_train, y_train, epochs=50, validation_data=(X_test, y_test)) #30
+    print("training model")
+    history = model.fit(
+        X_train,
+        y_train,
+        epochs=25,
+        validation_data=(X_test, y_test),
+        batch_size=64
+    )
 
     print("testing model")
     y_predict = model.predict(X_test)
