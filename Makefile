@@ -1,18 +1,26 @@
 export PIPENV_VENV_IN_PROJECT=true
 
+
+
 # -------------------------- docker setup ---------------------------- #
 
 # use local filesystem, but containerize execution
-IMAGE=mc706/pipenv-3.6
+IMAGE=audio
 DIR=$(shell pwd)
 DOCKER_RUN=docker run -ti -w /app -v $(DIR):/app $(IMAGE)
 
 
+
+
+
 # -------------------------- main functions -------------------------- #
+
+# run everything
+all: setup preprocess train
 
 
 # downloading the data and setting up a virtual env
-setup: bash_dependencies data/genres create_env
+setup: bash_dependencies docker_build data/genres .venv
 
 
 # organizing the data, creating melgrams and label encodings
@@ -25,13 +33,19 @@ train:
 
 
 
-# -------------------------- sub functions --------------------------- #
+
+
+
+# -------------------------- setup ----------------------------------- #
+
 
 
 # checking and installing bash dependencies if absent
 bash_dependencies:
 	./scripts/dependencies.sh assert docker
 
+docker_build:
+	docker build -t $(IMAGE) .
 
 # downloading data if absent
 data/genres:
@@ -39,15 +53,16 @@ data/genres:
 	$(DOCKER_RUN) tar zxvf data/gztan.tar.gz -C data
 
 
-# recreating a python virtual env containing all project dependencies
-compile:
-	./scripts/dependencies.sh assert pipenv
-	pipenv install
-
 # run the compilation process in a docker container
 # but create the .venv folder on your local machine
-create_env:
-	$(DOCKER_RUN) make compile
+.venv:
+	$(DOCKER_RUN) pipenv --three install
+
+
+
+
+
+# -------------------------- preprocessing --------------------------- #
 
 
 # creating data index if absent
@@ -67,4 +82,9 @@ data/melgrams.pkl:
 
 
 
-.PHONY: setup run bash_dependencies create_env preprocess
+
+
+
+
+
+.PHONY: setup train bash_dependencies docker_build preprocess all

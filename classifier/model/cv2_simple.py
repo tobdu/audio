@@ -12,13 +12,13 @@ def build(input_shape, output_shape):
     # create model
     model = Sequential()
 
+
     # model.add(Filterbank(n_fbs=1, trainable_fb=True, sr=12000, init='mel', fmin=0., fmax=None,
     #                      bins_per_octave=12, image_data_format='default', input_shape=input_shape))
 
     # Input block
     model.add(BatchNormalization(axis=freq_axis, name='bn_0_freq', input_shape=input_shape))
 
-    # model.add(GaussianNoise(0.1))
 
     # Conv block 1
     model.add(Convolution2D(64, 3, 3, border_mode='same', name='conv1'))
@@ -34,26 +34,12 @@ def build(input_shape, output_shape):
     model.add(MaxPooling2D(pool_size=(2, 4), name='pool2', dim_ordering="th"))
     model.add(Dropout(0.05, name='dropout2'))
 
-    # # Conv block 3
-    # model.add(Convolution2D(128, 3, 3, border_mode='same', name='conv3'))
-    # model.add(BatchNormalization(axis=channel_axis, mode=0, name='bn3'))
-    # model.add(ELU())
-    # model.add(MaxPooling2D(pool_size=(2, 4), name='pool3',dim_ordering="th"))
-    # model.add(Dropout(0.1, name='dropout3'))
-    #
-    # # Conv block 4
-    # model.add(Convolution2D(128, 3, 3, border_mode='same', name='conv4'))
-    # model.add(BatchNormalization(axis=channel_axis, mode=0, name='bn4'))
-    # model.add(ELU())
-    # model.add(MaxPooling2D(pool_size=(3, 5), name='pool4', dim_ordering="th"))
-    # model.add(Dropout(0.1, name='dropout4'))
-
-    # Conv block 5
-    model.add(Convolution2D(64, 3, 3, border_mode='same', name='conv5'))
-    model.add(BatchNormalization(axis=channel_axis, mode=0, name='bn5'))
+    # Conv block 3
+    model.add(Convolution2D(64, 3, 3, border_mode='same', name='conv3'))
+    model.add(BatchNormalization(axis=channel_axis, mode=0, name='bn3'))
     model.add(ELU())
-    model.add(MaxPooling2D(pool_size=(4, 4), name='pool5', dim_ordering="th"))
-    model.add(Dropout(0.05, name='dropout5'))
+    model.add(MaxPooling2D(pool_size=(4, 4), name='pool3', dim_ordering="th"))
+    model.add(Dropout(0.05, name='dropout3'))
 
     model.add(Flatten())
     model.add(Dense(10, activation='sigmoid', name='output'))
