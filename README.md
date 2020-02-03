@@ -1,4 +1,14 @@
-## Architecture
+# Music Genre Classifier
+## Run
+```make all``` 
+
+Will download the data, use a dockerized setup to compile a python virtual env containg all the necessary dependencies, run the preprocessing steps and run the training.
+The output can be found in the `target/` folder.
+
+Look in the [Makefile](Makefile) for other commands.
+
+
+## Model Architecture
 #### Blocks
 The model is a standard setup with 3 convolutional blocks. It was really easy to get a very low training error, indicating over-fitting, so more blocks did not seem necessary.  
 #### Loss Function
@@ -26,6 +36,8 @@ Filterbanks can be used to spot those harmonics before feeding the data into the
 
 ## Data Augmentation
 With such a small dataset, data synthesis is probably a good strategy. However, because audio data has some specific characteristics it's easy to make mistakes when doing this.
+For this exercise I haven't managed to include any sythesis techniques, but I will still share my ideas around them.
+
 #### White Noise
 While adding white-noise is a good strategy to make a model more robust, I'm not convinced if it's very useful for this specific task. 
 The purpose of adding white-noise would be to make your model better at 
@@ -34,7 +46,7 @@ But these are all studio recordings where a lot of effort went into reducing bac
 So it might help, but I don't expect any miracles.
 <br>
 
-There are also some mistakes one can make with with-noise: 
+There are also some mistakes one can make with white-noise: 
 - White noise can be an indicator for live recordings. By adding it you are removing that information from your data.
 - When adding white noise, you probably want to add it before creating the logarithmic spectrograms, otherwise your white-noise ends up being very dense in the lower frequencies and very sparse in the higher frequencies. Which is a type of noise that, as far as I know, doesn't occur in real life.
 - When adding any kind of noise, make sure that distribution of that noise is at least as big as the data size, otherwise the model will start finding patterns in the noise.
@@ -48,6 +60,8 @@ distortion is heavily used in punk, but hardly in jazz, classical music is never
 Changing pitch can be a very good way of making a model accept songs in all keys. I would guess that there is no pattern between key and genre. 
 However, although there is very good software out there to change the pitch of an isolated source like vocals, 
 I am not sure how easy it is to change the pitch of a combined signal like music without distorting it. 
+
+
 Note: For western music, when you change the pitch you want to stick to the 12-key scale. 
 #### Time
 Stretching or compressing time a little bit might be a good way of synthesising data, but I would keep the changes small since tempo can be indicative for genre. 
@@ -56,7 +70,7 @@ My first choice of data augmentation strategy would be to segmenting the the 30 
 Our ear can recognise a genre in a couple of seconds, so a model should be able to do the same.
 Segmenting has several benefits:
 * You skip the wrong instructing that the model should look at the 30s clips as a whole.
-* By chopping up the clips the number of samples increases.
+* By chopping up the clips, the number of samples increases.
 * If one uses a sliding window, you also add a time-shift aspect to the model.
 
 ## Results
@@ -68,3 +82,4 @@ On just two classes the results are actually quite good.
 The multi class results are terrible. But on the bright side, the low training error indicates that there is room for improvement with just tweaking the flexibility of the model. A hyper-parameter search would be a good next step.
 ![](target/1580741487/loss_history.png)
 ![](target/1580741487/matrix.png)
+b-e-a-utiful :)

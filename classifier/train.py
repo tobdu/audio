@@ -28,8 +28,6 @@ def load_data(path, encoder):
     X = [i[0] for i in df["melgram"]]
     X = np.array([x for x in X])
     map(lambda x : tf.convert_to_tensor(x), X)
-    # tf.convert_to_tensor(x)
-    # X = np.array(X, copy=True, subok=True)     # this is causing it to hang
 
     print("formatting y")
     y = np.array(encoder.transform([i for i in df["id"]]))
@@ -78,7 +76,7 @@ if __name__ == "__main__":
     history = model.fit(
         X_train,
         y_train,
-        epochs=80,
+        epochs=15,
         validation_data=(X_test, y_test),
         batch_size=64
     )
