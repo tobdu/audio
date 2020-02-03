@@ -1,8 +1,4 @@
-data/*
 .idea
 .DS_Store
-kapre*
-dist
 .venv
-build
-.pyc
+*.pyc
