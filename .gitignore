@@ -5,3 +5,4 @@ kapre*
 dist
 .venv
 build
+.pyc

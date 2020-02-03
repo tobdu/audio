@@ -1,14 +1,17 @@
+import os
+
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import StratifiedShuffleSplit
 import tensorflow as tf
 
 # from utils.confusion_matrix import plot_confusion_matrix
-from model import cv2_big
-from model import cv2_simple
+from model import cv2
 from utils import histories
 from utils import confusion_matrix
 from preprocess import label_encoding
+import calendar
+import time
 
 data_path = "data/melgrams.pkl"
 encodings_path = "data/index/encoding.csv"
@@ -36,7 +39,7 @@ def load_data(path, encoder):
 
 # split while keeping class balance
 def split(X, y):
-    splits = StratifiedShuffleSplit(test_size=0.3).split(X,y)
+    splits = StratifiedShuffleSplit(test_size=0.2).split(X,y)
 
     for train_i, test_i in splits:
         X_train = X[train_i]
@@ -46,30 +49,36 @@ def split(X, y):
 
         return X_train, X_test, y_train, y_test
 
+def get_target_dir():
+    ts = calendar.timegm(time.gmtime())
+    dir = 'target/' + str(ts)
+    os.mkdir(dir)
+    return dir
+
 
 if __name__ == "__main__":
+
+    run_dir = get_target_dir()
+
     encoder = label_encoding.load()
 
     X, y = load_data(data_path, encoder)
 
     X_train, X_test, y_train, y_test = split(X, y)
 
-    # X_train = tf.convert_to_tensor(X_train)
-
     input_shape = X[0].shape
 
     print("compiling model")
-    model = cv2_simple.build(input_shape, len(y[0]))
-    #model = cv2_big.build(X_train[0])
+    model = cv2.build(input_shape, len(y[0]))
 
     model.summary()
 
     print("training model")
-    print("training model")
+
     history = model.fit(
         X_train,
         y_train,
-        epochs=25,
+        epochs=80,
         validation_data=(X_test, y_test),
         batch_size=64
     )
@@ -82,13 +91,12 @@ if __name__ == "__main__":
     y_test = encoder.inverse_transform(y_test)
 
     print("printing results")
-    histories.plot(history, 'data')
-    confusion_matrix.plot(y_test, y_predict, 'data/matrix.png')
 
-
+    histories.plot(history, run_dir)
+    confusion_matrix.plot(y_test, y_predict, run_dir)
 
     print("saving model")
-    model.save('data/model.h5')
+    model.save(run_dir + '/model.h5')
 
 
 
